@@ -71,6 +71,7 @@
                 android:layout_width="@android:dimen/app_icon_size"
                 android:layout_height="@android:dimen/app_icon_size"
                 android:layout_marginHorizontal="30dp"
+                android:onClick="openSpeedOMeter"
                 app:icon="@drawable/ic_speedometer" />
 
             <Button

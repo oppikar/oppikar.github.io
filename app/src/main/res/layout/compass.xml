@@ -24,7 +24,8 @@
             android:layout_marginBottom="20dp"
             android:text="@string/compass"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
