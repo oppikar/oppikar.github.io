@@ -8,4 +8,5 @@
     <string name="text_location_permission">Darf SensoDroid auf deinen Standort zugreifen?</string>
     <string name="ok">Ok</string>
     <string name="zero">0</string>
+    <string name="speed_notification">Geschwindigkeit immer anzeigen</string>
 </resources>
