@@ -53,6 +53,7 @@
                 android:layout_width="@android:dimen/app_icon_size"
                 android:layout_height="@android:dimen/app_icon_size"
                 android:layout_marginHorizontal="30dp"
+                android:onClick="openBubbleLevel"
                 app:icon="@drawable/ic_spirit_level"
                 app:iconPadding="8dp" />
 
