@@ -72,6 +72,8 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
             if (SensorManager.getRotationMatrix(r, null, this.accelerometerValues, this.magneticFieldValues)) {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
+
+                // convert radians to degrees
                 val degree = (toDegrees(orientation[0].toDouble()) + 360).toFloat() % 360
 
                 val rotateAnimation = RotateAnimation(
