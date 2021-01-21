@@ -1,0 +1,67 @@
+commit 3b7d95dcf54097e0f58294c5a8d7d72fb168c7e1
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 21 15:01:22 2021 +0100
+
+    Index
+    
+    Setting up index site
+
+commit ad224af337d6904b7ac42a7b6c0765deb602c40f
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 21 14:05:41 2021 +0100
+
+    - making notification update in Background;
+    - introducing background service;
+    - introducing service component interaction;
+
+commit 29c58f4b44c519f09f1f2b48d20ae692b1a206aa
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 16:38:14 2021 +0100
+
+    - notification;
+
+commit e22281ca5c4088148b1349c1cb580021d89159a2
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 15:39:58 2021 +0100
+
+    - introducing speedometer;
+
+commit 21fa8f5f6adc504d9680737f82a2c4a0652e1e95
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 13:59:53 2021 +0100
+
+    - prevent the user from going savage on my app;
+
+commit 10dbffe5844fad59f3b4e307573674d0c6b2b6c2
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 13:54:12 2021 +0100
+
+    - add LauncherLogo;
+    - implement BubbleLevel;
+
+commit 784142fba45c514dca3c81347e1c871fb97ceabc
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 11:45:13 2021 +0100
+
+    beforeLunch;
+
+commit edeeb1e26a1ddf86985742c51070c485f95952b6
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 11:26:52 2021 +0100
+
+    - building compass activity;
+
+commit 44e3faac4110e43c6af192772aba9b53d91f833f
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 10:02:47 2021 +0100
+
+    - Building Main View;
+    - Introducing Material Icons;
+    - Initializing Compass Activity;
+    - Initializing Views;
+
+commit 2d261808d3966e4b99827e8b6d2f0b13ad8d2bd3
+Author: shakel <keller.shawn99@gmail.com>
+Date:   Thu Jan 14 08:48:13 2021 +0100
+
+    Initial Commit;

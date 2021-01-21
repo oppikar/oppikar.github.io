@@ -28,18 +28,12 @@ import com.google.android.gms.location.LocationServices
 
 class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
 
-    val CHANNEL_ID = "speed_channel"
-    val CHANNEL_NAME = "Tachometer"
-
     val MY_PERMISSIONS_REQUEST_LOCATION = 99
     lateinit var notificationSwitch: SwitchCompat
-    lateinit var notificationManager: NotificationManager
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var locationManager: LocationManager
-    lateinit var notification: NotificationCompat.Builder
     var speed = 0.0f
     var speedDisplay: TextView? = null
-    var notificationIsActive = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,24 +48,12 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
             run {
                 if (isChecked) {
                     this.setPrefs(true)
-                    this.activatePermaSpeedNotification()
                 }
                 if (!isChecked) {
                     this.setPrefs(false)
-                    this.notificationManager.cancelAll()
-                    this.notificationIsActive = false
                 }
             }
         }
-
-        this.notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        this.notificationManager.createNotificationChannel(
-            NotificationChannel(
-                this.CHANNEL_ID,
-                this.CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-        )
 
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
@@ -110,10 +92,6 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
 
         this.speed = (Math.round(location.speed * 3.6 * 100.0) / 100.0).toFloat()
         this.speedDisplay?.text = "${this.speed}"
-        if (this.notificationIsActive) {
-            this.notification.setContentText("${this.speed} km/h")
-            this.notificationManager.notify(0, this.notification.build())
-        }
     }
 
     fun onCheckedChange() {}
@@ -174,18 +152,6 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
             == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1f, this)
         }
-    }
-
-    fun activatePermaSpeedNotification() {
-        this.notification = NotificationCompat.Builder(this, this.CHANNEL_ID)
-            .setContentTitle("Tempo")
-            .setContentText("${this.speed} km/h")
-            .setSmallIcon(R.drawable.ic_speedometer)
-            .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        this.notificationManager.notify(0, this.notification.build())
-
-        this.notificationIsActive = true
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

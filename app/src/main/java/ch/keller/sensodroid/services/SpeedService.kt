@@ -86,7 +86,11 @@ class SpeedService : Service(), LocationListener {
 
     fun checkWhetherNotificationShouldBeSetAndSet() {
         if (this.sharedPref.getString("notification_is_active", false.toString()).toBoolean()) {
-            this.createNotification()
+            if (!this::notification.isInitialized) {
+                this.createNotification()
+            }
+        } else {
+            this.notificationManager.cancelAll()
         }
     }
 
@@ -142,18 +146,6 @@ class SpeedService : Service(), LocationListener {
             return
         }
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, this)
-    }
-
-    fun activatePermaSpeedNotification() {
-        this.notification = NotificationCompat.Builder(this, this.CHANNEL_ID)
-            .setContentTitle("Tempo")
-            .setContentText("${this.speed} km/h")
-            .setSmallIcon(R.drawable.ic_speedometer)
-            .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        this.notificationManager.notify(0, this.notification.build())
-
-        this.isNotificationActive = true
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
