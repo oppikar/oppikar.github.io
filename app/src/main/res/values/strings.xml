@@ -9,4 +9,6 @@
     <string name="ok">Ok</string>
     <string name="zero">0</string>
     <string name="speed_notification">Geschwindigkeit immer anzeigen</string>
+    <string name="current_speed">0.0</string>
+    <string name="notification_is_active">false</string>
 </resources>

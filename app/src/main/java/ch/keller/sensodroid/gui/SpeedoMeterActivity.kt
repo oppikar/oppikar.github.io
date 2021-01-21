@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import ch.keller.sensodroid.MainActivity
 import ch.keller.sensodroid.R
+import ch.keller.sensodroid.services.SpeedService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -38,27 +39,39 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
     lateinit var notification: NotificationCompat.Builder
     var speed = 0.0f
     var speedDisplay: TextView? = null
+    var notificationIsActive = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_speedo_meter)
 
+        startService(Intent(applicationContext, SpeedService::class.java))
+
         this.checkLocationPermissions()
 
         this.notificationSwitch = findViewById(R.id.speed_switch)
-        this.notificationSwitch.setOnCheckedChangeListener{ view, isChecked ->
+        this.notificationSwitch.setOnCheckedChangeListener { view, isChecked ->
             run {
                 if (isChecked) {
+                    this.setPrefs(true)
                     this.activatePermaSpeedNotification()
                 }
                 if (!isChecked) {
+                    this.setPrefs(false)
                     this.notificationManager.cancelAll()
+                    this.notificationIsActive = false
                 }
             }
         }
 
         this.notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        this.notificationManager.createNotificationChannel(NotificationChannel(this.CHANNEL_ID, this.CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT))
+        this.notificationManager.createNotificationChannel(
+            NotificationChannel(
+                this.CHANNEL_ID,
+                this.CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
 
         this.locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
@@ -78,11 +91,28 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
         this.fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
+    fun setPrefs(flag: Boolean) {
+        val sharedPref = this.getSharedPreferences("strings", Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString("notification_is_active", "${flag}")
+            apply()
+        }
+    }
+
     override fun onLocationChanged(location: Location) {
-        if (location.speed > 0) {
-            this.speed = location.speed
-            this.speedDisplay?.text = "${Math.round(location.speed*3.6 * 100.0) / 100.0  }"
-            this.notification.setContentText("${location.speed} km/h")
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1f, this)
+        }
+
+        if (location.speed <= 0) return
+
+        this.speed = (Math.round(location.speed * 3.6 * 100.0) / 100.0).toFloat()
+        this.speedDisplay?.text = "${this.speed}"
+        if (this.notificationIsActive) {
+            this.notification.setContentText("${this.speed} km/h")
+            this.notificationManager.notify(0, this.notification.build())
         }
     }
 
@@ -149,17 +179,22 @@ class SpeedoMeterActivity : AppCompatActivity(), LocationListener {
     fun activatePermaSpeedNotification() {
         this.notification = NotificationCompat.Builder(this, this.CHANNEL_ID)
             .setContentTitle("Tempo")
-            .setContentText("${this.speed}")
+            .setContentText("${this.speed} km/h")
             .setSmallIcon(R.drawable.ic_speedometer)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         this.notificationManager.notify(0, this.notification.build())
+
+        this.notificationIsActive = true
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1f, this)
         }
     }

@@ -79,7 +79,7 @@ class ViewDrawer(context: Context?) : View(context) {
     }
 
     val zDegrees: Float
-        get() = orientation!![2] % 360
+        get() = orientation[2] % 360
 
     fun setOrientation(orientation: FloatArray) {
         this.orientation = orientation
